@@ -22,5 +22,9 @@
 # TTYD 免登录
 sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.config
 
+# 1.5 【针对 LibWrt 的无线切除手术】直接从机型 Makefile 定义里抹除强制捆绑的无线板级包
+# 遍历 qualcommax 平台下所有的 .mk 机型配置文件，把 cmiot_ax18 强制捆绑的 wifi 依赖行直接擦除
+find target/linux/qualcommax/image/ -name "*.mk" | xargs sed -i 's/ipq-wifi-cmiot_ax18//g' 2>/dev/null
+
 # 2. 自动将基础组件中的 dnsmasq 替换为 dnsmasq-full，从源头规避包冲突
 find include/ target/ -name "Makefile" -o -name "*.mk" | xargs sed -i 's/\bdnsmasq\b/dnsmasq-full/g' 2>/dev/null
